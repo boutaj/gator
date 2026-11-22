@@ -32,7 +32,7 @@ func handlerLogin(s *state, cmd command) error {
 
 func handlerRegister(s *state, cmd command) error {
 	if len(cmd.args) == 0 {
-		return errors.New("the login handler expects a single argument, the username.")
+		return errors.New("the register handler expects a single argument, the username.")
 	}
 
 	params := &database.CreateUserParams{
@@ -51,7 +51,32 @@ func handlerRegister(s *state, cmd command) error {
 		return err
 	}
 
-	fmt.Printf("The username %s has been registred!\n", user.Name)
+	fmt.Printf("The username %s has been registered!\n", user.Name)
+
+	return nil
+}
+
+func handleReset(s *state, cmd command) error {
+	if err := s.db.DeleteUsers(context.Background()); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func handleUsers(s *state, cmd command) error {
+	users, err := s.db.GetUsers(context.Background())
+	if err != nil {
+		return err
+	}
+
+	for _, user := range users {
+		if user.Name == s.cnf.CurrentUserName {
+			fmt.Printf("* %s (current)\n", user.Name)
+		} else {
+			fmt.Printf("* %s\n", user.Name)
+		}
+	}
 
 	return nil
 }

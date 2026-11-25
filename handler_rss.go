@@ -12,7 +12,7 @@ import (
 
 const URL = "https://www.wagslane.dev/index.xml"
 
-func handlerRss(s *state, cmd command) error {
+func handleRss(s *state, cmd command) error {
 	feed, err := rss.FetchFeed(context.Background(), URL)
 	if err != nil {
 		return err
@@ -47,7 +47,18 @@ func handleFeed(s *state, cmd command) error {
 		return err
 	}
 
-	fmt.Printf("%s\n", feed)
+	fmt.Printf("%v\n", feed)
 
 	return nil
+}
+
+func handleFeeds(s *state, cmd command) error {
+	feeds, err := s.db.GetFeeds(context.Background())
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("%v\n", feeds)
+
+	return  nil
 }

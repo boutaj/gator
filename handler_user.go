@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func handlerLogin(s *state, cmd command) error {
+func handleLogin(s *state, cmd command) error {
 	if len(cmd.args) == 0 {
 		return errors.New("the login handler expects a single argument, the username.")
 	}
@@ -30,7 +30,7 @@ func handlerLogin(s *state, cmd command) error {
 	return nil
 }
 
-func handlerRegister(s *state, cmd command) error {
+func handleRegister(s *state, cmd command) error {
 	if len(cmd.args) == 0 {
 		return errors.New("the register handler expects a single argument, the username.")
 	}

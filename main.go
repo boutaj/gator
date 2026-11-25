@@ -35,12 +35,13 @@ func main() {
 	commands := &commands{
 		handler: make(map[string]func(*state, command) error),
 	}
-	commands.register("login", handlerLogin)
-	commands.register("register", handlerRegister)
+	commands.register("login", handleLogin)
+	commands.register("register", handleRegister)
 	commands.register("reset", handleReset)
 	commands.register("users", handleUsers)
-	commands.register("agg", handlerRss)
+	commands.register("agg", handleRss)
 	commands.register("addfeed", handleFeed)
+	commands.register("feeds" , handleFeeds)
 
 	arguments := os.Args
 	if len(arguments) < 2 {

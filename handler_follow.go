@@ -9,16 +9,11 @@ import (
 	"github.com/boutaj/gator/internal/database"
 )
 
-func handleFollow(s *state, cmd command) error {
+func handleFollow(s *state, cmd command, user database.User) error {
 	if len(cmd.args) == 0 {
 		return errors.New("the follow handler expects a single argument, the feed url.")
 	}
-
-	user, err := s.db.GetUser(context.Background(), s.cnf.CurrentUserName)
-	if err != nil {
-		return err
-	}
-
+	
 	feed, err := s.db.GetFeed(context.Background(), cmd.args[0])
 
 	params := &database.CreateFeedFollowParams{
@@ -38,13 +33,7 @@ func handleFollow(s *state, cmd command) error {
 	return  nil
 }
 
-func handleFollowing(s *state, cmd command) error {
-
-	user, err := s.db.GetUser(context.Background(), s.cnf.CurrentUserName)
-	if err != nil {
-		return err
-	}
-
+func handleFollowing(s *state, cmd command, user database.User) error {
 	feedFollows, err := s.db.GetFeedFollowsForUser(context.Background(), user.ID)
 	if err != nil {
 		return err
@@ -52,6 +41,26 @@ func handleFollowing(s *state, cmd command) error {
 
 	for _, feedFollow := range feedFollows {
 		fmt.Printf("%s\n", feedFollow.Name)
+	}
+
+	return  nil
+}
+
+func handleUnfollow(s *state, cmd command, user database.User) error {
+	if len(cmd.args) == 0 {
+		return errors.New("the unfollow handler expects a single argument, the feed url.")
+	}
+	
+	feed, err := s.db.GetFeed(context.Background(), cmd.args[0])
+
+	params := &database.DeleteFeedFollowForUserParams{
+		UserID: user.ID,
+		FeedID: int32(feed.ID),
+	}
+
+	err = s.db.DeleteFeedFollowForUser(context.Background(), *params)
+	if err != nil {
+		return err
 	}
 
 	return  nil

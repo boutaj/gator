@@ -21,16 +21,11 @@ func handleRss(s *state, cmd command) error {
 	return nil
 }
 
-func handleFeed(s *state, cmd command) error {
+func handleFeed(s *state, cmd command, user database.User) error {
 	if len(cmd.args) < 1 {
 		return errors.New("the login handler expects two argument, the name and url.")
 	}
-
-	user, err := s.db.GetUser(context.Background(), s.cnf.CurrentUserName)
-	if err != nil {
-		return err
-	}
-
+	
 	name := cmd.args[0]
 	url  := cmd.args[1]
 

@@ -46,6 +46,18 @@ func handleFeed(s *state, cmd command) error {
 	if err != nil {
 		return err
 	}
+	
+	fparams := &database.CreateFeedFollowParams{
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		UserID: user.ID,
+		FeedID: int32(feed.ID),
+	}
+
+	_, err = s.db.CreateFeedFollow(context.Background(), *fparams)
+	if err != nil {
+		return err
+	}
 
 	fmt.Printf("%v\n", feed)
 

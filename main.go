@@ -42,6 +42,8 @@ func main() {
 	commands.register("agg", handleRss)
 	commands.register("addfeed", handleFeed)
 	commands.register("feeds" , handleFeeds)
+	commands.register("follow" , handleFollow)
+	commands.register("following" , handleFollowing)
 
 	arguments := os.Args
 	if len(arguments) < 2 {
